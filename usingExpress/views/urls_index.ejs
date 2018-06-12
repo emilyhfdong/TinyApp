@@ -25,10 +25,15 @@
           <tr>
             <td> <%= urls[shortURL] %> </td>
             <td> <%= shortURL %> </td>
+            <td>
+              <form method="POST" action= <%="/urls/" + shortURL + "/delete" %>>
+                <input type="submit" value="Delete">
+              </form>
+            </td>
           </tr>
           <%}%>
           <tr>
-            <td><a href = "www.google.ca"> New URL!</a></td>
+            <td><a href = "/urls/new"> New URL!</a></td>
           </tr>
         </tbody>
 

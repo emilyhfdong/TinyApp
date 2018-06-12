@@ -47,8 +47,7 @@ app.post("/urls", (req, res) => {
   let newShort = generateRandomString();
   urlDatabase[newShort] = req.body.longURL;
 
-  console.log(urlDatabase);  // debug statement to see POST parameters
-  res.redirect("http://localhost:8080/urls/" + newShort);         // Respond with 'Ok' (we will replace this)
+  res.redirect("http://localhost:8080/urls/" + newShort);
 });
 
 app.get("/urls/:id", (req, res) => {
@@ -65,6 +64,12 @@ app.get("/u/:shortURL", (req, res) => {
     res.status(301);
     res.redirect(longURL);
   }
+});
+
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id];
+  res.redirect("http://localhost:8080/urls/");
+
 });
 
 
