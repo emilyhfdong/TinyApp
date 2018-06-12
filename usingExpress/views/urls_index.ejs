@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+  <div class = "container">
+    <table class = "table">
+      <thead>
+        <tr>
+          <th>URL</th>
+          <th>Shortened URL</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% for(let shortURL in urls) { %>
+        <tr>
+          <td> <%= urls[shortURL] %> </td>
+          <td> <%= shortURL %> </td>
+        </tr>
+        <%}%>
+        <tr>
+          <td><a href = "www.google.ca"> New URL!</a></td>
+        </tr>
+      </tbody>
+
+    </table>
+
+
+
+
+
+
+  </div>
+
+</body>
+</html>
