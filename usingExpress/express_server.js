@@ -7,6 +7,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
 
+function generateRandomString() {
+  const lettersAndNums = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+  var str = '';
+  for (let i = 0; i < 6; i ++) {
+    str += lettersAndNums[Math.floor(Math.random() * (61))];
+  }
+  return str;
+}
+
 
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -34,10 +43,20 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+app.post("/urls", (req, res) => {
+  let newShort = generateRandomString();
+  urlDatabase[newShort] = req.body.longURL;
+
+  console.log(urlDatabase);  // debug statement to see POST parameters
+  res.redirect("http://localhost:8080/urls/" + newShort);         // Respond with 'Ok' (we will replace this)
+});
+
 app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id]};
   res.render("urls_show", templateVars);
 });
+
+
 
 
 
