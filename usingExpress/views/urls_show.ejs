@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>TinyApp</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
+  <head>
+    <title>TinyApp</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </head>
 
-<header>
-  <% include ./partials/_header.ejs %>
-</header>
+  <body>
+    <header>
+      <% include ./partials/_header.ejs %>
+    </header>
+    <div class = "container">
+      <ul class="list-group">
+        <li class="list-group-item"><b>Full URL: </b> <%= longURL %> </li>
+        <li class="list-group-item"><b>Shortened URL: </b><%= shortURL %></li>
+      </ul>
 
-<body>
-  <div class = "container">
-    <ul class="list-group">
-      <li class="list-group-item"><b>Full URL: </b> <%= longURL %> </li>
-      <li class="list-group-item"><b>Shortened URL: </b><%= shortURL %></li>
-    </ul>
+    </div>
 
-  </div>
-
-</body>
+  </body>
 </html>
