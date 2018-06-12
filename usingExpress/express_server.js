@@ -56,6 +56,17 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  let longURL = urlDatabase[req.params.shortURL];
+  if (!urlDatabase[req.params.shortURL]) {
+    res.status(400);
+    res.send('shortened URL does not exist');
+  } else {
+    res.status(301);
+    res.redirect(longURL);
+  }
+});
+
 
 
 
