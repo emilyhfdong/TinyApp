@@ -10,10 +10,19 @@
       <% include ./partials/_header.ejs %>
     </header>
     <div class = "container">
-      <ul class="list-group">
+<!--       <ul class="list-group">
         <li class="list-group-item"><b>Full URL: </b> <%= longURL %> </li>
         <li class="list-group-item"><b>Shortened URL: </b><%= shortURL %></li>
-      </ul>
+      </ul> -->
+
+      <h2><b>Short URL: </b><%= shortURL %> </h2>
+      <h6>
+        <form action="/urls/:id" method="POST">
+          <!-- <label for="longURL">Long URL: </label> -->
+          <input id="longURL" type="text" name="longURL" class="form-control" placeholder= <%= longURL %> >
+          <input type="submit" value="Update" class="btn btn-primary">
+        </form>
+      </h6>
 
     </div>
 
