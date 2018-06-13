@@ -18,6 +18,15 @@
         <label for="password">Password:</label>
         <input id="password" type="password" name="password">
         <input type="submit" value="Submit" class="btn btn-primary btn-sm">
+        <% if (errors.emptyEmail === 1) {%>
+        <h6 style="color: red; background: pink">Please enter a email!</h6>
+        <%}%>
+        <% if (errors.emptyPassword === 1) {%>
+        <h6 style="color: red; background: pink">Please enter a password!</h6>
+        <%}%>
+        <% if (errors.alreadyEmail === 1) {%>
+        <h6 style="color: red; background: pink">Email is taken!</h6>
+        <%}%>
       </form>
     </div>
   </body>

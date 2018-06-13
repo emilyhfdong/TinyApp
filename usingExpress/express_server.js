@@ -3,7 +3,7 @@ var app = express();
 var PORT = 8080; // default port 8080
 var express = require('express')
 var cookieParser = require('cookie-parser');
-let error = 0;
+let errors = {};
 
 var app = express()
 app.use(cookieParser())
@@ -64,14 +64,14 @@ app.get("/urls", (req, res) => {
 
 //GET new url form page
 app.get("/urls/new", (req, res) => {
-  templateVars = {username: req.cookies["username"], error: error};
+  templateVars = {username: req.cookies["username"], errors: errors};
   res.render("urls_new", templateVars);
 });
 
 //POST new url (from new url page)
 app.post("/urls", (req, res) => {
   if (!req.body.longURL) {
-    error = 1;
+    errors.emptyURL = 1;
     res.redirect("http://localhost:8080/urls/new/");
   } else {
     let newShort = generateRandomString();
@@ -79,6 +79,7 @@ app.post("/urls", (req, res) => {
       newShort = generateRandomString;
     }
     urlDatabase[newShort] = req.body.longURL;
+    errors.emptyURL = 0;
 
     res.redirect("http://localhost:8080/urls/" + newShort);
   }
@@ -133,7 +134,7 @@ app.post("/logout", (req, res) => {
 
 //GET register form page
 app.get("/register", (req, res) => {
-  templateVars = {username: req.cookies["username"]};
+  templateVars = {username: req.cookies["username"], errors: errors};
   res.render("register", templateVars)
 
 })
@@ -141,13 +142,35 @@ app.get("/register", (req, res) => {
 //POST register
 app.post("/register", (req, res) => {
   let userID = generateRandomString();
-  users[userID] = {
-    id: userID,
-    email: req.body.email,
-    password: req.body.password
+  let emails = [];
+
+  for (user in users) {
+    emails.push(users[user]['email']);
   }
-  res.cookie("user_id", userID);
-  res.redirect("http://localhost:8080/urls/")
+
+  if (req.body.email && req.body.password && !emails.includes(req.body.email)) {
+    users[userID] = {
+      id: userID,
+      email: req.body.email,
+      password: req.body.password
+    }
+    errors.emptyEmail = 0;
+    errors.emptyPassword = 0;
+    res.cookie("user_id", userID);
+    res.redirect("http://localhost:8080/urls/")
+  } else {
+    if (!req.body.email) {
+      errors.emptyEmail = 1;
+    }
+    if (!req.body.password){
+      errors.emptyPassword = 1;
+    }
+    if (emails.includes(req.body.email)) {
+      errors.alreadyEmail = 1;
+    }
+    res.redirect("http://localhost:8080/register");
+
+  }
 
 })
 
