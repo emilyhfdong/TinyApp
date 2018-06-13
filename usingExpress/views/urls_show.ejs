@@ -9,12 +9,9 @@
     <header>
       <% include ./partials/_header.ejs %>
     </header>
-    <div class = "container">
-<!--       <ul class="list-group">
-        <li class="list-group-item"><b>Full URL: </b> <%= longURL %> </li>
-        <li class="list-group-item"><b>Shortened URL: </b><%= shortURL %></li>
-      </ul> -->
 
+    <div class = "container">
+      <h6><a href= "/urls/"> Back </a></h6>
       <h2><b>Short URL: </b><%= shortURL %> </h2>
       <h6>
         <form action= <%="/urls/" + shortURL %> method="POST">
