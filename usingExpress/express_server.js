@@ -2,7 +2,8 @@ var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
 var express = require('express')
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
+let error = 0;
 
 var app = express()
 app.use(cookieParser())
@@ -50,19 +51,24 @@ app.get("/urls", (req, res) => {
 
 //GET new url form page
 app.get("/urls/new", (req, res) => {
-  templateVars = {username: req.cookies["username"]};
+  templateVars = {username: req.cookies["username"], error: error};
   res.render("urls_new", templateVars);
 });
 
 //POST new url (from new url page)
 app.post("/urls", (req, res) => {
-  let newShort = generateRandomString();
-  while (urlDatabase[newShort]) {
-    newShort = generateRandomString;
-  }
-  urlDatabase[newShort] = req.body.longURL;
+  if (!req.body.longURL) {
+    error = 1;
+    res.redirect("http://localhost:8080/urls/new/");
+  } else {
+    let newShort = generateRandomString();
+    while (urlDatabase[newShort]) {
+      newShort = generateRandomString;
+    }
+    urlDatabase[newShort] = req.body.longURL;
 
-  res.redirect("http://localhost:8080/urls/" + newShort);
+    res.redirect("http://localhost:8080/urls/" + newShort);
+  }
 });
 
 //GET show/edit existing short URL page
@@ -103,6 +109,12 @@ app.post("/urls/:id/", (req, res) => {
 //POST login to cookies
 app.post("/login", (req,res) => {
   res.cookie("username", req.body.username);
+  res.redirect("http://localhost:8080/urls/");
+});
+
+//POST logout
+app.post("/logout", (req,res) => {
+  res.clearCookie("username");
   res.redirect("http://localhost:8080/urls/");
 });
 
