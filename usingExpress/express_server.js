@@ -107,16 +107,23 @@ app.post("/urls/:id/", (req, res) => {
 });
 
 //POST login to cookies
-app.post("/login", (req,res) => {
+app.post("/login", (req, res) => {
   res.cookie("username", req.body.username);
   res.redirect("http://localhost:8080/urls/");
 });
 
 //POST logout
-app.post("/logout", (req,res) => {
+app.post("/logout", (req, res) => {
   res.clearCookie("username");
   res.redirect("http://localhost:8080/urls/");
 });
+
+//GET register form page
+app.get("/register", (req, res) => {
+  templateVars = {username: req.cookies["username"]};
+  res.render("register", templateVars)
+
+})
 
 
 

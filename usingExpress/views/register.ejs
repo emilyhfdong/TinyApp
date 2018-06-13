@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TinyApp</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <header>
+      <% include ./partials/_header.ejs %>
+    </header>
+
+    <div style= "margin-left: 25px">
+      <h6><a href= "/urls/"> Back </a></h6>
+      <form action="/register" method="POST" style="margin:100px;>
+        <label for="email">Email:</label>
+        <input id="email" type="email" name="email">
+        <label for="password">Password:</label>
+        <input id="password" type="password" name="password">
+        <input type="submit" value="Submit" class="btn btn-primary btn-sm">
+      </form>
+    </div>
+  </body>
+
+</html>
