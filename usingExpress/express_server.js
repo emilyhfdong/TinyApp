@@ -41,20 +41,17 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-//GET hello page
-app.get("/hello", (req, res) => {
-  res.end("<html><body>Hello <b>World</b></body></html>\n");
-});
 
 //GET url index page
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
+  let templateVars = { urls: urlDatabase, username: req.cookies["username"] };
   res.render("urls_index", templateVars);
 });
 
 //GET new url form page
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  templateVars = {username: req.cookies["username"]};
+  res.render("urls_new", templateVars);
 });
 
 //POST new url (from new url page)
@@ -73,7 +70,7 @@ app.get("/urls/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.status(404).render("404");
   } else {
-    let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
+    let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], username: req.cookies["username"]};
     res.render("urls_show", templateVars);
   }
 });
