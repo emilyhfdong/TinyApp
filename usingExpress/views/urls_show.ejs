@@ -17,7 +17,7 @@
 
       <h2><b>Short URL: </b><%= shortURL %> </h2>
       <h6>
-        <form action="/urls/:id" method="POST">
+        <form action= <%="/urls/" + shortURL %> method="POST">
           <!-- <label for="longURL">Long URL: </label> -->
           <input id="longURL" type="text" name="longURL" class="form-control" placeholder= <%= longURL %> >
           <input type="submit" value="Update" class="btn btn-primary">

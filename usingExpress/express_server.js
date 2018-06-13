@@ -72,6 +72,12 @@ app.post("/urls/:id/delete", (req, res) => {
 
 });
 
+app.post("/urls/:id/", (req, res) => {
+  urlDatabase[req.params.id] = req.body.longURL;
+  res.redirect("http://localhost:8080/urls/");
+
+});
+
 
 
 
