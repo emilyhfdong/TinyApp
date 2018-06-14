@@ -5,7 +5,8 @@ const cookieSession = require("cookie-session");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 
-let errors = {};
+
+let errors = {}; // declare empty error object
 
 app.use(cookieSession({keys: ["skldjflskdjflsjd"]}));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -15,6 +16,7 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
+// function to generate a random string of letters and numbers
 function generateRandomString() {
   const lettersAndNums = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
   var str = "";
@@ -24,6 +26,7 @@ function generateRandomString() {
   return str;
 }
 
+// function to create object of URLs for a given user id
 function urlsForUser(id) {
   let databaseForID = {};
   for (let shortURL in urlDatabase) {
@@ -37,6 +40,7 @@ function urlsForUser(id) {
   return databaseForID;
 }
 
+// function to create array from user object
 function createArrayFromUsers (key) {
   let array = [];
   for (let user in users) {
@@ -45,6 +49,7 @@ function createArrayFromUsers (key) {
   return array;
 }
 
+// user database
 let users = {
   "userRandomID": {
     id: "userRandomID",
@@ -58,6 +63,7 @@ let users = {
   }
 }
 
+// url database
 let urlDatabase = {
   "b2xVn2": {
     longURL: "http://www.lighthouselabs.ca",
@@ -81,6 +87,7 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+// if user is logged in, show list of URLs. Otherwise, show a message to log in
 app.get("/urls", (req, res) => {
   if (!req.session.user_id) {
     res.render("pleaseLogin", {user: users[req.session.user_id]});
@@ -90,6 +97,7 @@ app.get("/urls", (req, res) => {
   }
 });
 
+// if user is loggen in, show new url form. Otherwise, redirect to login page
 app.get("/urls/new", (req, res) => {
   if (!req.session.user_id) {
     res.redirect("/login")
@@ -99,6 +107,7 @@ app.get("/urls/new", (req, res) => {
   }
 });
 
+// show URL page to user
 app.get("/urls/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.status(404).render("404", {user: users[req.session.user_id]});
@@ -110,6 +119,7 @@ app.get("/urls/:shortURL", (req, res) => {
   }
 });
 
+// redirect shortURL to longURL
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL]["longURL"];
   if (!urlDatabase[req.params.shortURL]) {
@@ -120,6 +130,7 @@ app.get("/u/:shortURL", (req, res) => {
   }
 });
 
+// post new urls
 app.post("/urls", (req, res) => {
   errors.emptyURL = 0;
   if (!req.body.longURL) {
@@ -140,6 +151,7 @@ app.post("/urls", (req, res) => {
   }
 });
 
+// update urls
 app.post("/urls/:shortURL/", (req, res) => {
   if (req.session.user_id === urlDatabase[req.params.shortURL]["userID"]) {
     urlDatabase[req.params.shortURL]['longURL'] = req.body.longURL;
@@ -149,6 +161,7 @@ app.post("/urls/:shortURL/", (req, res) => {
   }
 });
 
+// delete urls
 app.post("/urls/:shortURL/delete", (req, res) => {
   if (req.session.user_id === urlDatabase[req.params.shortURL]["userID"]) {
     delete urlDatabase[req.params.shortURL];
@@ -158,6 +171,7 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   }
 });
 
+// login page
 app.get("/login", (req, res) => {
   if (req.session.user_id) {
     res.redirect("/urls");
@@ -167,6 +181,7 @@ app.get("/login", (req, res) => {
   }
 });
 
+//register page
 app.get("/register", (req, res) => {
   templateVars = {user: users[req.session.user_id], errors: errors};
   if (req.session.user_id) {
@@ -177,36 +192,46 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
+  // create arrays for emails, passwords, and ids
   let emailsArr = createArrayFromUsers("email");
   let passwordsArr = createArrayFromUsers("password");
   let idsArr = createArrayFromUsers("id");
 
+  // reset errors to be zero
   errors.emailNotFound = 0;
   errors.incorrectPassword = 0;
+
   let templateVars = {user: users[req.session.user_id], errors: errors};
 
+  //if the given email is not found, send error message
   if (!emailsArr.includes(req.body.email)) {
     errors.emailNotFound = 1;
     res.render("login", templateVars);
   }
+  //if password does not match password in database, send error
   else if (!bcrypt.compareSync(req.body.password, passwordsArr[emailsArr.indexOf(req.body.email)])) {
     errors.incorrectPassword = 1;
     res.render("login", templateVars);
-  } else {
+  }
+  // if password and email match, redirect to homepage
+  else {
     req.session.user_id = idsArr[emailsArr.indexOf(req.body.email)];
     res.redirect("/");
   }
-
 });
 
 app.post("/register", (req, res) => {
   let user_id = generateRandomString();
+
+  // create array of emails
   let emailsArr = createArrayFromUsers("email");
 
+  // reset errors to be zero
   errors.emptyEmail = 0;
   errors.emptyPassword = 0;
   errors.alreadyEmail = 0;
 
+  // if email and password are filled out and email does not already exist in database, create cookie and redirect to urls index
   if (req.body.email && req.body.password && !emailsArr.includes(req.body.email)) {
     users[user_id] = {
       id: user_id,
@@ -216,12 +241,15 @@ app.post("/register", (req, res) => {
     req.session.user_id = user_id;
     res.redirect("/urls")
   } else {
+    // if email is blank, send error message
     if (!req.body.email) {
       errors.emptyEmail = 1;
     }
+    // if password is blank, send error message
     if (!req.body.password){
       errors.emptyPassword = 1;
     }
+    // if the email already exists in the database, send error message
     if (emailsArr.includes(req.body.email)) {
       errors.alreadyEmail = 1;
     }
@@ -229,6 +257,7 @@ app.post("/register", (req, res) => {
   }
 });
 
+// logout page
 app.get("/logout", (req, res) => {
   req.session = null;
   res.redirect("/urls/");
