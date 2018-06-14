@@ -9,19 +9,19 @@
       <% include ./partials/_header.ejs %>
     </header>
 
-    <div style= "margin-left: 25px">
-      <h2>Login</h2>
-      <form method="POST" action= "/login">
-        <label for="email">Email:</label>
-        <input id="email" type="email" name="email">
-        <label for="password">Password:</label>
-        <input id="password" type="password" name="password">
-        <input type="submit" value="Submit" class="btn btn-primary btn-sm">
+    <div style= "text-align: center">
+      <h5>Login</h5>
+      <form method = "POST" action = "/login" style = >
+        <label for = "email">Email:</label>
+        <input id = "email" type = "email" name = "email">
+        <label for = "password">Password:</label>
+        <input id = "password" type = "password" name = "password">
+        <input type = "submit" value = "Submit" class = "btn btn-primary btn-sm">
         <% if (errors.incorrectPassword === 1) {%>
-          <h6 style="color: red; background: pink">Incorrect Password!</h6>
+          <h6 style = "color: red; background: pink">Incorrect Password!</h6>
         <%}%>
         <% if (errors.emailNotFound === 1) {%>
-          <h6 style="color: red; background: pink">Email not found!</h6>
+          <h6 style = "color: red; background: pink">Email not found!</h6>
         <%}%>
       </form>
     </div>

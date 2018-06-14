@@ -9,14 +9,14 @@
       <% include ./partials/_header.ejs %>
     </header>
 
-    <div class = "container">
-      <h6><a href= "/urls/"> Back </a></h6>
+    <div class = "container" style = "text-align: center;">
+      <h6><a href = "/urls/"> Back </a></h6>
       <h2><b>Short URL: </b><%= shortURL %> </h2>
       <h6>
-        <form action= <%="/urls/" + shortURL %> method="POST">
+        <form action = <%= "/urls/" + shortURL %> method="POST">
           <!-- <label for="longURL">Long URL: </label> -->
-          <input id="longURL" type="text" name="longURL" class="form-control" placeholder= <%= longURL %> >
-          <input type="submit" value="Update" class="btn btn-primary">
+          <input id = "longURL" type = "text" name = "longURL" class = "form-control" placeholder = <%= longURL %> >
+          <input type = "submit" value = "Update" class = "btn btn-primary">
         </form>
       </h6>
 

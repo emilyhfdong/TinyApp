@@ -9,14 +9,14 @@
       <% include ./partials/_header.ejs %>
     </header>
 
-    <div style= "margin-left: 25px">
-      <h2>Register</h2>
-      <form action="/register" method="POST">
-        <label for="email">Email:</label>
-        <input id="email" type="email" name="email">
-        <label for="password">Password:</label>
-        <input id="password" type="password" name="password">
-        <input type="submit" value="Submit" class="btn btn-primary btn-sm">
+    <div style= "text-align: center">
+      <h5>Register</h5>
+      <form action = "/register" method = "POST">
+        <label for = "email">Email:</label>
+        <input id = "email" type = "email" name="email">
+        <label for = "password">Password:</label>
+        <input id = "password" type = "password" name = "password">
+        <input type = "submit" value = "Submit" class = "btn btn-primary btn-sm">
         <% if (errors.emptyEmail === 1) {%>
         <h6 style="color: red; background: pink">Please enter a email!</h6>
         <%}%>
