@@ -12,10 +12,12 @@
     <div class = "container">
       <h6><a href= "/urls/"> Back </a></h6>
       <h2><b>Short URL: </b><%= shortURL %> </h2>
+      <h6>Date Created: <%= url["dateCreated"] %></h6>
+      <h6>Times Visited: <%= url["timesVisited"]%></h6>
       <h6>
         <form action= <%="/urls/" + shortURL %> method="POST">
           <!-- <label for="longURL">Long URL: </label> -->
-          <input id="longURL" type="text" name="longURL" class="form-control" placeholder= <%= longURL %> >
+          <input id="longURL" type="text" name="longURL" class="form-control" placeholder= <%= url["longURL"]%> >
           <input type="submit" value="Update" class="btn btn-primary">
         </form>
       </h6>

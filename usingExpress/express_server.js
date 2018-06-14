@@ -33,7 +33,9 @@ function urlsForUser(id) {
     if (urlDatabase[shortURL]["userID"] === id) {
       databaseForID[shortURL] = {
         longURL: urlDatabase[shortURL]["longURL"],
-        userID: id
+        userID: id,
+        dateCreated: urlDatabase[shortURL]["dateCreated"],
+        timesVisited: urlDatabase[shortURL]["timesVisited"]
       }
     }
   }
@@ -47,6 +49,12 @@ function createArrayFromUsers (key) {
     array.push(users[user][key]);
   }
   return array;
+}
+
+// function to create string of current date
+function getDateStr() {
+  let dateObj = new Date();
+  return dateObj.toDateString();
 }
 
 // user database
@@ -67,11 +75,15 @@ let users = {
 let urlDatabase = {
   "b2xVn2": {
     longURL: "http://www.lighthouselabs.ca",
-    userID: "userRandomID"
+    userID: "userRandomID",
+    dateCreated: "Tue Jun 12 2018",
+    timesVisited: 0
   },
   "9sm5xK": {
     longURL: "http://www.google.com",
-    userID: "user2RandomID"
+    userID: "user2RandomID",
+    dateCreated: "Wed Jun 13 2018",
+    timesVisited: 0
   }
 };
 
@@ -97,7 +109,7 @@ app.get("/urls", (req, res) => {
   }
 });
 
-// if user is loggen in, show new url form. Otherwise, redirect to login page
+// if user is logged in, show new url form. Otherwise, redirect to login page
 app.get("/urls/new", (req, res) => {
   if (!req.session.user_id) {
     res.redirect("/login")
@@ -109,12 +121,20 @@ app.get("/urls/new", (req, res) => {
 
 // show URL page to user
 app.get("/urls/:shortURL", (req, res) => {
+  // if short URL does not exist, render 404 page
   if (!urlDatabase[req.params.shortURL]) {
     res.status(404).render("404", {user: users[req.session.user_id]});
-  } else if (!req.session.user_id || urlDatabase[req.params.shortURL]["userID"] !== req.session.user_id) {
+  }
+  // if user is not logged in OR their id does not match the URLs id, render pleaseLogin page
+  else if (!req.session.user_id || urlDatabase[req.params.shortURL]["userID"] !== req.session.user_id) {
     res.render("pleaseLogin", {user: users[req.session.user_id]});
-  } else {
-    let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]["longURL"], user: users[req.session.user_id]};
+  }
+  // otherwise, show URLs belonging to the user
+  else {
+    let templateVars = {
+      shortURL: req.params.shortURL,
+      url: urlDatabase[req.params.shortURL],
+      user: users[req.session.user_id]};
     res.render("urls_show", templateVars);
   }
 });
@@ -125,6 +145,7 @@ app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.status(404).render("404", {user: users[req.session.user_id]});
   } else {
+    urlDatabase[req.params.shortURL]["timesVisited"] += 1;
     res.status(301);
     res.redirect(longURL);
   }
@@ -145,7 +166,10 @@ app.post("/urls", (req, res) => {
     }
     urlDatabase[newShort] = {
       longURL: req.body.longURL,
-      userID: req.session.user_id
+      userID: req.session.user_id,
+      dateCreated: getDateStr(),
+      timesVisited: 0
+
     };
     res.redirect("/urls/" + newShort);
   }
