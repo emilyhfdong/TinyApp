@@ -53,6 +53,19 @@ var urlDatabase = {
   }
 };
 
+function urlsForUser(id) {
+  let databaseForID = {};
+  for (let shortURL in urlDatabase) {
+    if (urlDatabase[shortURL]['userID'] === id) {
+      databaseForID[shortURL] = {
+        longURL: urlDatabase[shortURL]['longURL'],
+        userID: id
+      }
+    }
+  }
+  return databaseForID;
+}
+
 //GET home page
 app.get("/", (req, res) => {
   res.end("Hello!");
@@ -66,8 +79,12 @@ app.get("/urls.json", (req, res) => {
 
 //GET url index page
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, user: users[req.cookies["user_id"]] };
-  res.render("urls_index", templateVars);
+  if (!req.cookies["user_id"]) {
+    res.render("pleaseLogin", {user: users[req.cookies["user_id"]]})
+  } else {
+    let templateVars = { urls: urlsForUser(req.cookies["user_id"]), user: users[req.cookies["user_id"]] };
+    res.render("urls_index", templateVars);
+  }
 });
 
 //GET new url form page
@@ -104,10 +121,14 @@ app.post("/urls", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.status(404).render("404");
+  } else if (!req.cookies["user_id"] || urlDatabase[req.params.shortURL]["userID"] !== req.cookies["user_id"]) {
+    res.render("pleaseLogin", {user: users[req.cookies["user_id"]]});
   } else {
     let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]['longURL'], user: users[req.cookies["user_id"]]};
     res.render("urls_show", templateVars);
   }
+
+
 });
 
 //GET redirected long URL from shortURL
