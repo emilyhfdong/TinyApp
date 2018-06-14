@@ -1,14 +1,14 @@
-var express = require("express");
-var app = express();
-var PORT = 8080; // default port 8080
-var express = require('express')
-var cookieParser = require('cookie-parser');
+const express = require("express");
+const app = express();
+const PORT = 8080; // default port 8080
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+
 let errors = {};
 let emails = [];
 let passwords = [];
 let ids = [];
 
-var app = express()
 app.use(cookieParser())
 
 const bodyParser = require("body-parser");
@@ -33,12 +33,12 @@ const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: bcrypt.hashSync("test1", 10)
   },
  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: bcrypt.hashSync("test2", 10)
   }
 }
 
@@ -172,7 +172,7 @@ app.post("/login", (req, res) => {
     res.status(301);
     res.send("E-mail cannot be found");
   }
-  else if (passwords[emails.indexOf(req.body.email)] !== req.body.password) {
+  else if (!bcrypt.compareSync(req.body.password, passwords[emails.indexOf(req.body.email)])) {
     res.status(301);
     res.send("Incorrect password");
   } else {
@@ -207,7 +207,7 @@ app.post("/register", (req, res) => {
     users[user_id] = {
       id: user_id,
       email: req.body.email,
-      password: req.body.password
+      password: bcrypt.hashSync(req.body.password, 10)
     }
     errors.emptyEmail = 0;
     errors.emptyPassword = 0;
