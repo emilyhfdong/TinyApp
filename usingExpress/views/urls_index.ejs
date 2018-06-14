@@ -22,7 +22,7 @@
         <tbody>
           <% for(let shortURL in urls) { %>
           <tr>
-            <td> <%= urls[shortURL] %> </td>
+            <td> <%= urls[shortURL]['longURL'] %> </td>
             <td> <%= shortURL %> </td>
             <td>
               <a href = <%= "/urls/" + shortURL %> >Edit </a>

@@ -42,11 +42,15 @@ const users = {
   }
 }
 
-
-
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": {
+    longURL: "http://www.lighthouselabs.ca",
+    userID: "userRandomID"
+  },
+  "9sm5xK": {
+    longURL: "http://www.google.com",
+    userID: "user2RandomID"
+  }
 };
 
 //GET home page
@@ -86,9 +90,12 @@ app.post("/urls", (req, res) => {
     while (urlDatabase[newShort]) {
       newShort = generateRandomString;
     }
-    urlDatabase[newShort] = req.body.longURL;
+    urlDatabase[newShort] = {
+      longURL: req.body.longURL,
+      userID: req.cookies["user_id"]
+    };
     errors.emptyURL = 0;
-
+    console.log(urlDatabase);
     res.redirect("http://localhost:8080/urls/" + newShort);
   }
 });
@@ -98,14 +105,14 @@ app.get("/urls/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.status(404).render("404");
   } else {
-    let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: users[req.cookies["user_id"]]};
+    let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]['longURL'], user: users[req.cookies["user_id"]]};
     res.render("urls_show", templateVars);
   }
 });
 
 //GET redirected long URL from shortURL
 app.get("/u/:shortURL", (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
+  let longURL = urlDatabase[req.params.shortURL]['longURL'];
   if (!urlDatabase[req.params.shortURL]) {
     res.status(404).render("404");
   } else {
@@ -115,15 +122,15 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 //DELETE url (from url index page)
-app.post("/urls/:id/delete", (req, res) => {
-  delete urlDatabase[req.params.id];
+app.post("/urls/:shortURL/delete", (req, res) => {
+  delete urlDatabase[req.params.shortURL];
   res.redirect("http://localhost:8080/urls/");
 
 });
 
 //UPDATE url (from show URL page)
-app.post("/urls/:id/", (req, res) => {
-  urlDatabase[req.params.id] = req.body.longURL;
+app.post("/urls/:shortURL/", (req, res) => {
+  urlDatabase[req.params.shortURL]['longURL'] = req.body.longURL;
   res.redirect("http://localhost:8080/urls/");
 
 });
