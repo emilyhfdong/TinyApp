@@ -68,8 +68,12 @@ app.get("/urls", (req, res) => {
 
 //GET new url form page
 app.get("/urls/new", (req, res) => {
-  templateVars = {user: users[req.cookies["user_id"]], errors: errors};
-  res.render("urls_new", templateVars);
+  if (!req.cookies["user_id"]) {
+    res.redirect("/login")
+  } else {
+    templateVars = {user: users[req.cookies["user_id"]], errors: errors};
+    res.render("urls_new", templateVars);
+  }
 });
 
 //POST new url (from new url page)
