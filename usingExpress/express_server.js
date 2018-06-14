@@ -123,14 +123,19 @@ app.get("/u/:shortURL", (req, res) => {
 
 //DELETE url (from url index page)
 app.post("/urls/:shortURL/delete", (req, res) => {
-  delete urlDatabase[req.params.shortURL];
+  if (req.cookies["user_id"] === urlDatabase[req.params.shortURL]['userID']) {
+      delete urlDatabase[req.params.shortURL];
+  }
   res.redirect("http://localhost:8080/urls/");
 
 });
 
-//UPDATE url (from show URL page)
+//EDIT url (from show URL page)
 app.post("/urls/:shortURL/", (req, res) => {
-  urlDatabase[req.params.shortURL]['longURL'] = req.body.longURL;
+  if (req.cookies["user_id"] === urlDatabase[req.params.shortURL]['userID']) {
+      urlDatabase[req.params.shortURL]['longURL'] = req.body.longURL;
+  }
+
   res.redirect("http://localhost:8080/urls/");
 
 });
