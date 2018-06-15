@@ -9,11 +9,12 @@
       <% include ./partials/_header.ejs %>
     </header>
 
-    <div class = "container" style = "text-align: center;">
+    <div class = "container">
       <h6><a href = "/urls/"> Back </a></h6>
       <h2><b>Short URL: </b><%= shortURL %> </h2>
       <h6>Date Created: <%= url["dateCreated"] %></h6>
       <h6>Times Visited: <%= url["timesVisited"]%></h6>
+      <h6>Unique Visits: <%= url["uniqueViews"]%></h6>
       <h6>
         <form action = <%= "/urls/" + shortURL %> method="POST">
           <!-- <label for="longURL">Long URL: </label> -->

@@ -18,6 +18,7 @@
             <th>Shortened URL</th>
             <th>Date Created </th>
             <th>Times Visited </th>
+            <th>Unique Visits </th>
           </tr>
         </thead>
 
@@ -27,7 +28,8 @@
             <td> <%= urls[shortURL]["longURL"] %> </td>
             <td> <%= shortURL %> </td>
             <td> <%= urls[shortURL]["dateCreated"] %></td>
-            <td> <%= urls[shortURL]["timesVisited"]%>
+            <td> <%= urls[shortURL]["timesVisited"]%> </td>
+            <td> <%= urls[shortURL]["uniqueViews"]%> </td>
             <td>
               <a href = <%= "/urls/" + shortURL %> >Edit </a>
             </td>

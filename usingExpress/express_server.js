@@ -35,7 +35,9 @@ function urlsForUser(id) {
         longURL: urlDatabase[shortURL]["longURL"],
         userID: id,
         dateCreated: urlDatabase[shortURL]["dateCreated"],
-        timesVisited: urlDatabase[shortURL]["timesVisited"]
+        timesVisited: urlDatabase[shortURL]["timesVisited"],
+        uniqueViews: urlDatabase[shortURL]["uniqueViews"],
+        uniqueViewers: urlDatabase[shortURL]["uniqueViewers"]
       }
     }
   }
@@ -77,13 +79,17 @@ let urlDatabase = {
     longURL: "http://www.lighthouselabs.ca",
     userID: "userRandomID",
     dateCreated: "Tue Jun 12 2018",
-    timesVisited: 0
+    timesVisited: 0,
+    uniqueViews: 0,
+    uniqueViewers: []
   },
   "9sm5xK": {
     longURL: "http://www.google.com",
     userID: "user2RandomID",
     dateCreated: "Wed Jun 13 2018",
-    timesVisited: 0
+    timesVisited: 0,
+    uniqueViews: 0,
+    uniqueViewers: []
   }
 };
 
@@ -141,11 +147,24 @@ app.get("/urls/:shortURL", (req, res) => {
 
 // redirect shortURL to longURL
 app.get("/u/:shortURL", (req, res) => {
+  if (!req.session.userCookie) {
+    req.session.userCookie = generateRandomString();
+  }
+
   let longURL = urlDatabase[req.params.shortURL]["longURL"];
+
   if (!urlDatabase[req.params.shortURL]) {
     res.status(404).render("404", {user: users[req.session.user_id]});
   } else {
     urlDatabase[req.params.shortURL]["timesVisited"] += 1;
+    if (urlDatabase[req.params.shortURL]["uniqueViews"] === 0){
+      urlDatabase[req.params.shortURL]["uniqueViews"] =1;
+      urlDatabase[req.params.shortURL]["uniqueViewers"].push(req.session.userCookie);
+    } else if (!urlDatabase[req.params.shortURL]["uniqueViewers"].includes(req.session.userCookie)) {
+      urlDatabase[req.params.shortURL]["uniqueViews"] +=1;
+      urlDatabase[req.params.shortURL]["uniqueViewers"].push(req.session.userCookie);
+    }
+
     res.status(301);
     res.redirect(longURL);
   }
@@ -168,8 +187,9 @@ app.post("/urls", (req, res) => {
       longURL: req.body.longURL,
       userID: req.session.user_id,
       dateCreated: getDateStr(),
-      timesVisited: 0
-
+      timesVisited: 0,
+      uniqueViews: 0,
+      uniqueViewers: []
     };
     res.redirect("/urls/" + newShort);
   }
