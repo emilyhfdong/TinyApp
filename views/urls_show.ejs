@@ -32,9 +32,7 @@
         </tbody>
       </table>
       <h6>
-        <form action = <%= "/urls/" + shortURL %> method="POST">
-          <!-- <label for="longURL">Long URL: </label> -->
-
+        <form action = <%= "/urls/" + shortURL + "?_method=PUT"%> method="POST">
           <input id = "longURL" type = "text" name = "longURL" class = "form-control" placeholder = <%= url["longURL"]%> >
           <input type = "submit" value = "Update" class = "btn btn-primary" style = "margin-top: 10px">
         </form>

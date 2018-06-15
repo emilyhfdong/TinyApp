@@ -34,7 +34,7 @@
               <a href = <%= "/urls/" + shortURL %> >Edit </a>
             </td>
             <td>
-              <form method = "POST" action = <%="/urls/" + shortURL + "/delete" %>>
+              <form method = "POST" action = <%="/urls/" + shortURL + "/delete?_method=DELETE" %>>
                 <input type = "submit" value = "Delete" class = "btn btn-primary">
               </form>
             </td>

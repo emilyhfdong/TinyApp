@@ -4,6 +4,7 @@ const PORT = 8080; // default port 8080
 const cookieSession = require("cookie-session");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
+const methodOverride = require('method-override')
 
 
 let errors = {}; // declare empty error object
@@ -11,6 +12,8 @@ let errors = {}; // declare empty error object
 app.use(cookieSession({keys: ["skldjflskdjflsjd"]}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
+app.use(methodOverride('_method'))
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
@@ -207,7 +210,7 @@ app.post("/urls", (req, res) => {
 });
 
 // update urls
-app.post("/urls/:shortURL/", (req, res) => {
+app.put("/urls/:shortURL/", (req, res) => {
   if (req.session.user_id === urlDatabase[req.params.shortURL]["userID"]) {
     urlDatabase[req.params.shortURL]['longURL'] = req.body.longURL;
     res.redirect("/urls");
@@ -217,7 +220,7 @@ app.post("/urls/:shortURL/", (req, res) => {
 });
 
 // delete urls
-app.post("/urls/:shortURL/delete", (req, res) => {
+app.delete("/urls/:shortURL/delete", (req, res) => {
   if (req.session.user_id === urlDatabase[req.params.shortURL]["userID"]) {
     delete urlDatabase[req.params.shortURL];
     res.redirect("/urls");
