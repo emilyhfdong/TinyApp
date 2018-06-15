@@ -8,8 +8,8 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 - shows list of all of user's short URLS
 
-<div style= "box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
-  <img src="https://github.com/emilyhfdong/TinyApp/blob/master/docs/url-index.png" alt="URL index page">
+<div>
+  <img src="https://github.com/emilyhfdong/TinyApp/blob/master/docs/url-index.png" alt="URL index page" style= "box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
 </div>
 !["Screenshot of show URL page"](https://github.com/emilyhfdong/TinyApp/blob/master/docs/url-index.png" alt="URL index page)
 
