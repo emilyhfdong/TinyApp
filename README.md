@@ -9,7 +9,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
 - shows list of all of user's short URLS
 
 <div style= "box-shadow: 10px 10px 5px #aaaaaa">
-!["Screenshot of URL index page"](https://github.com/emilyhfdong/TinyApp/blob/master/docs/url-index.png)
+  <img src="https://github.com/emilyhfdong/TinyApp/blob/master/docs/url-index.png" alt="URL index page">
 </div>
 
 #### URL analytics/edit page
