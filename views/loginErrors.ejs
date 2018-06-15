@@ -17,6 +17,12 @@
         <label for = "password">Password:</label>
         <input id = "password" type = "password" name = "password">
         <input type = "submit" value = "Submit" class = "btn btn-primary btn-sm">
+        <% if (errors.incorrectPassword === 1) {%>
+          <h6 style = "color: red; background: pink">Incorrect Password!</h6>
+        <%}%>
+        <% if (errors.emailNotFound === 1) {%>
+          <h6 style = "color: red; background: pink">Email not found!</h6>
+        <%}%>
       </form>
     </div>
 

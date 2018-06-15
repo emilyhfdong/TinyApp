@@ -250,12 +250,12 @@ app.post("/login", (req, res) => {
   //if the given email is not found, send error message
   if (!emailsArr.includes(req.body.email)) {
     errors.emailNotFound = 1;
-    res.render("login", templateVars);
+    res.render("loginErrors", templateVars);
   }
   //if password does not match password in database, send error
   else if (!bcrypt.compareSync(req.body.password, passwordsArr[emailsArr.indexOf(req.body.email)])) {
     errors.incorrectPassword = 1;
-    res.render("login", templateVars);
+    res.render("loginErrors", templateVars);
   }
   // if password and email match, redirect to homepage
   else {
@@ -274,6 +274,9 @@ app.post("/register", (req, res) => {
   errors.emptyEmail = 0;
   errors.emptyPassword = 0;
   errors.alreadyEmail = 0;
+
+  let templateVars = {user: users[req.session.user_id], errors: errors};
+
 
   // if email and password are filled out and email does not already exist in database, create cookie and redirect to urls index
   if (req.body.email && req.body.password && !emailsArr.includes(req.body.email)) {
@@ -297,7 +300,7 @@ app.post("/register", (req, res) => {
     if (emailsArr.includes(req.body.email)) {
       errors.alreadyEmail = 1;
     }
-    res.redirect("/register");
+    res.render("registerErrors", templateVars);
   }
 });
 
