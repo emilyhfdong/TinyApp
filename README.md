@@ -4,8 +4,22 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
+#### URL index page
+
+- shows list of all of user's short URLS
+
 !["Screenshot of URL index page"](https://github.com/emilyhfdong/TinyApp/blob/master/docs/url-index.png)
+
+#### URL analytics/edit page
+
+- ability to track:
+    - number of unique visits and total visits
+    - time and visitor id of every visit
+
 !["Screenshot of show URL page"](https://github.com/emilyhfdong/TinyApp/blob/master/docs/show-url.png)
+
+#### Register page
+
 !["Screenshot of register page"](https://github.com/emilyhfdong/TinyApp/blob/master/docs/register-page.png)
 
 
