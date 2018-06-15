@@ -59,6 +59,12 @@ function getDateStr() {
   return dateObj.toDateString();
 }
 
+//function to reate timestamp
+function getTimestamp () {
+  let dateObj = new Date();
+  return dateObj.toUTCString();
+}
+
 // user database
 let users = {
   "userRandomID": {
@@ -79,7 +85,7 @@ let urlDatabase = {
     longURL: "http://www.lighthouselabs.ca",
     userID: "userRandomID",
     dateCreated: "Tue Jun 12 2018",
-    timesVisited: 0,
+    timesVisited: [],
     uniqueViews: 0,
     uniqueViewers: []
   },
@@ -87,7 +93,7 @@ let urlDatabase = {
     longURL: "http://www.google.com",
     userID: "user2RandomID",
     dateCreated: "Wed Jun 13 2018",
-    timesVisited: 0,
+    timesVisited: [],
     uniqueViews: 0,
     uniqueViewers: []
   }
@@ -156,12 +162,17 @@ app.get("/u/:shortURL", (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
     res.status(404).render("404", {user: users[req.session.user_id]});
   } else {
-    urlDatabase[req.params.shortURL]["timesVisited"] += 1;
+    urlDatabase[req.params.shortURL]["timesVisited"].push({
+      visitorID: req.session.userCookie,
+      date: getTimestamp()
+    });
+
     if (urlDatabase[req.params.shortURL]["uniqueViews"] === 0){
-      urlDatabase[req.params.shortURL]["uniqueViews"] =1;
+      urlDatabase[req.params.shortURL]["uniqueViews"] = 1;
       urlDatabase[req.params.shortURL]["uniqueViewers"].push(req.session.userCookie);
+
     } else if (!urlDatabase[req.params.shortURL]["uniqueViewers"].includes(req.session.userCookie)) {
-      urlDatabase[req.params.shortURL]["uniqueViews"] +=1;
+      urlDatabase[req.params.shortURL]["uniqueViews"] += 1;
       urlDatabase[req.params.shortURL]["uniqueViewers"].push(req.session.userCookie);
     }
 
@@ -187,7 +198,7 @@ app.post("/urls", (req, res) => {
       longURL: req.body.longURL,
       userID: req.session.user_id,
       dateCreated: getDateStr(),
-      timesVisited: 0,
+      timesVisited: [],
       uniqueViews: 0,
       uniqueViewers: []
     };

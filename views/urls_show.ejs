@@ -13,8 +13,24 @@
       <h6><a href = "/urls/"> Back </a></h6>
       <h2><b>Short URL: </b><%= shortURL %> </h2>
       <h6>Date Created: <%= url["dateCreated"] %></h6>
-      <h6>Times Visited: <%= url["timesVisited"]%></h6>
+      <h6>Times Visited: <%= url["timesVisited"].length%></h6>
       <h6>Unique Visits: <%= url["uniqueViews"]%></h6>
+      <table class = "table" style = "text-align: center;">
+        <thead>
+          <tr>
+            <th>Visitor ID</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let i = 0; i < url["timesVisited"].length; i ++ ) { %>
+          <tr>
+            <td> <%= url["timesVisited"][i]["visitorID"] %> </td>
+            <td> <%= url["timesVisited"][i]["date"] %> </td>
+          </tr>
+          <%}%>
+        </tbody>
+      </table>
       <h6>
         <form action = <%= "/urls/" + shortURL %> method="POST">
           <!-- <label for="longURL">Long URL: </label> -->
